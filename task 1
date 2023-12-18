@@ -1,0 +1,65 @@
+import os
+
+def load_tasks():
+    tasks = {}
+    if os.path.exists("tasks.txt"):
+        with open("tasks.txt", "r") as file:
+            for line in file:
+                task, status = line.strip().split(":")
+                tasks[task] = status
+    return tasks
+
+def save_tasks(tasks):
+    with open("tasks.txt", "w") as file:
+        for task, status in tasks.items():
+            file.write(f"{task}:{status}\n")
+
+def display_tasks(tasks):
+    if not tasks:
+        print("No tasks found.")
+    else:
+        print("Tasks:")
+        for task, status in tasks.items():
+            print(f"{task} - {status}")
+
+def add_task(tasks, new_task):
+    tasks[new_task] = "Incomplete"
+    save_tasks(tasks)
+    print(f"Task '{new_task}' added.")
+
+def update_task(tasks, task_to_update):
+    if task_to_update in tasks:
+        tasks[task_to_update] = "Complete"
+        save_tasks(tasks)
+        print(f"Task '{task_to_update}' marked as complete.")
+    else:
+        print(f"Task '{task_to_update}' not found.")
+
+def main():
+    tasks = load_tasks()
+
+    while True:
+        print("\nOptions:")
+        print("1. Display Tasks")
+        print("2. Add Task")
+        print("3. Update Task")
+        print("4. Quit")
+
+        choice = input("Enter your choice (1/2/3/4): ")
+
+        if choice == "1":
+            display_tasks(tasks)
+        elif choice == "2":
+            new_task = input("Enter the new task: ")
+            add_task(tasks, new_task)
+        elif choice == "3":
+            task_to_update = input("Enter the task to mark as complete: ")
+            update_task(tasks, task_to_update)
+        elif choice == "4":
+            print("Exiting the To-Do List application.")
+            break
+        else:
+            print("Invalid choice. Please enter 1, 2, 3, or 4.")
+
+if _name_ == "_main_":
+    main()
